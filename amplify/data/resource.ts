@@ -24,7 +24,26 @@ const schema = a.schema({
     downs: a.integer(),
     version: a.integer(),
   }),
-  
+
+    
+  addPost: a
+    .mutation()
+    .arguments({
+      id: a.id(),
+      author: a.string().required(),
+      title: a.string(),
+      content: a.string(),
+      url: a.string(),
+    })
+    .returns(a.ref("Post"))
+    .authorization(allow => [allow.publicApiKey()])
+    .handler(
+      a.handler.custom({
+        dataSource: "ExternalPostTableDataSource",
+        entry: "./addPost.js",
+      })
+    ),
+
 });
 
 
